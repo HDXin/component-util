@@ -9,5 +9,8 @@
         <module name="component-util" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="component-util" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

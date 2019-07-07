@@ -6,20 +6,7 @@
 
     <groupId>top.atstudy.component</groupId>
     <artifactId>component-util</artifactId>
-    <version>1.2-SNAPSHOT</version>
-
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>Releases Repository</name>
-            <url>http://nexus.51alf.cn/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>snapshots Repository</name>
-            <url>http://nexus.51alf.cn/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <version>1.3-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -33,5 +20,18 @@
             <version>1.7.10</version>
         </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>local_nexus_releases</id>
+            <name>core Release Repository</name>
+            <url>http://nexus.51alf.cn/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>local_nexus_snapshots</id>
+            <name>core Snapshots Repository</name>
+            <url>http://nexus.51alf.cn/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

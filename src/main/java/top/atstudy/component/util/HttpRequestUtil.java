@@ -6,6 +6,7 @@
 package top.atstudy.component.util;
 
 import com.alibaba.fastjson.JSONObject;
+import javax.net.ssl.*;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -13,24 +14,16 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.URL;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import javax.net.ssl.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import top.atstudy.component.enums.EnumRequestMethod;
+public class HttpRequestUtil extends BaseHttpUtl {
 
-public class HttpUtil {
-    private static final Logger log = LoggerFactory.getLogger(HttpUtil.class);
-
-    public HttpUtil() {
+    private static final HttpRequestUtil instance = new HttpRequestUtil();
+    private HttpRequestUtil() {}
+    public static HttpRequestUtil getInstance(){
+        return instance;
     }
 
-    private static JSONObject httpRequest(String requestUrl, EnumRequestMethod method, String outputStr) {
+    JSONObject httpRequest(String requestUrl, String method, String outputStr) {
         JSONObject jsonObject = null;
         StringBuffer buffer = new StringBuffer();
 
@@ -45,8 +38,8 @@ public class HttpUtil {
             httpUrlConn.setDoOutput(true);
             httpUrlConn.setDoInput(true);
             httpUrlConn.setUseCaches(false);
-            httpUrlConn.setRequestMethod(method.getCode());
-            if (EnumRequestMethod.GET == method) {
+            httpUrlConn.setRequestMethod(method);
+            if ("GET".equals(method)) {
                 httpUrlConn.connect();
             }
 
@@ -81,41 +74,5 @@ public class HttpUtil {
         return jsonObject;
     }
 
-    public static JSONObject get(String url, Map<String, Object> params) {
-        if (params != null) {
-            StringBuilder stringBuilder = new StringBuilder("");
-            Iterator var3 = params.entrySet().iterator();
-
-            while(var3.hasNext()) {
-                Entry<String, Object> entry = (Entry)var3.next();
-                stringBuilder.append("&").append((String)entry.getKey()).append("=").append(entry.getValue());
-            }
-
-            String paramsStr = stringBuilder.toString();
-            url = url + "?" + paramsStr.substring(1, paramsStr.length());
-        }
-
-        log.info(" ===>> request: {}", url);
-        return httpRequest(url, EnumRequestMethod.GET, (String)null);
-    }
-
-    public static JSONObject post(String url, String params) {
-        return httpRequest(url, EnumRequestMethod.POST, params);
-    }
-
-    static class MyX509TrustManager implements X509TrustManager {
-        public MyX509TrustManager() {
-        }
-
-        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
-
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
-
-        public X509Certificate[] getAcceptedIssuers() {
-            return null;
-        }
-    }
 
 }

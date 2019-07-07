@@ -18,18 +18,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.net.ssl.*;
+import top.atstudy.component.config.Constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import top.atstudy.component.enums.EnumRequestMethod;
+public class WxPaymentUtil extends BaseHttpUtl {
 
-public class WxPaymentUtil {
-    private static final Logger log = LoggerFactory.getLogger(WxPaymentUtil.class);
-
-    public WxPaymentUtil() {
+    private static final WxPaymentUtil instance = new WxPaymentUtil();
+    private WxPaymentUtil() {}
+    public static WxPaymentUtil getInstance(){
+        return instance;
     }
 
-    private static String httpRequest(String requestUrl, EnumRequestMethod method, String outputStr) {
+    private static String httpRequest(String requestUrl, String method, String outputStr) {
         StringBuffer buffer = new StringBuffer();
 
         try {
@@ -43,8 +42,8 @@ public class WxPaymentUtil {
             httpUrlConn.setDoOutput(true);
             httpUrlConn.setDoInput(true);
             httpUrlConn.setUseCaches(false);
-            httpUrlConn.setRequestMethod(method.getCode());
-            if (EnumRequestMethod.GET == method) {
+            httpUrlConn.setRequestMethod(method);
+            if ("GET".equals(method)) {
                 httpUrlConn.connect();
             }
 
@@ -85,19 +84,22 @@ public class WxPaymentUtil {
 
             while(var3.hasNext()) {
                 Entry<String, Object> entry = (Entry)var3.next();
-                stringBuilder.append("&").append((String)entry.getKey()).append("=").append(entry.getValue());
+                stringBuilder.append(Constants.UrlLink.DEFAULT_REQUEST_PARAMS_SEPARATOR)
+                        .append(entry.getKey())
+                        .append(Constants.UrlLink.DEFAULT_REQUEST_PARAMS_LINK)
+                        .append(entry.getValue());
             }
 
             String paramsStr = stringBuilder.toString();
-            url = url + "?" + paramsStr.substring(1, paramsStr.length());
+            url = url + Constants.UrlLink.DEFAULT_PARAMS_SEPARATOR + paramsStr.substring(1, paramsStr.length());
         }
 
         log.info(" ===>> request: {}", url);
-        return httpRequest(url, EnumRequestMethod.GET, (String)null);
+        return httpRequest(url, Constants.HttpRequestMethod.GET, (String)null);
     }
 
     public static String post(String url, String params) {
-        return httpRequest(url, EnumRequestMethod.POST, params);
+        return httpRequest(url, Constants.HttpRequestMethod.POST, params);
     }
 
     static class MyX509TrustManager implements X509TrustManager {
