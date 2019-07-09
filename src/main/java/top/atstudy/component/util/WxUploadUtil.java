@@ -10,7 +10,6 @@ import java.util.Formatter;
 
 public class WxUploadUtil {
     private static final Logger log = LoggerFactory.getLogger(WxUploadUtil.class);
-
     public WxUploadUtil() {
     }
 
